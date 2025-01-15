@@ -6,28 +6,34 @@ import { cookies } from 'next/headers';
 import { GameState } from './types';
 import { gameStore } from '../lib/store';
 
-export async function createGame(): Promise<void> {
-  const gameId = uuidv4();
-  const newGame: GameState = {
-    id: gameId,
-    status: 'waiting',
-    player1: 'player1',
-    player2: null,
-    currentTurn: null,
-    choices: {},
-    winner: null
-  };
+export async function createGame(req, res) {
+  try {
+    const gameId = uuidv4();
+    const newGame: GameState = {
+      id: gameId,
+      status: 'waiting',
+      player1: 'player1',
+      player2: null,
+      currentTurn: null,
+      choices: {},
+      winner: null
+    };
 
-  await gameStore.set(`game:${gameId}`, newGame);
-  
-  // Set cookie for player1
-  cookies().set(`game:${gameId}:player`, 'player1', { 
-    path: '/',
-    maxAge: 3600 // 1 hour
-  });
+    await gameStore.set(`game:${gameId}`, newGame);
+    
+    // Set cookie for player1
+    cookies().set(`game:${gameId}:player`, 'player1', { 
+      path: '/',
+      maxAge: 3600 // 1 hour
+    });
 
-  console.log('Game created successfully:', gameId);
-  redirect(`/game/${gameId}`);
+    console.log('Game created successfully:', gameId);
+    redirect(`/game/${gameId}`);
+    res.status(200).json({ message: 'Game created successfully' });
+  } catch (error) {
+    console.error('Error creating game:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
 }
 
 export async function joinGame(gameId: string): Promise<'player1' | 'player2' | null> {
