@@ -3,10 +3,11 @@
 import { v4 as uuidv4 } from 'uuid';
 import { redirect } from 'next/navigation';
 import { cookies } from 'next/headers';
+import { NextApiRequest, NextApiResponse } from 'next';
 import { GameState } from './types';
 import { gameStore } from '../lib/store';
 
-export async function createGame(req, res) {
+export async function createGame(req: NextApiRequest, res: NextApiResponse) {
   try {
     const gameId = uuidv4();
     const newGame: GameState = {

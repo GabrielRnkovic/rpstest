@@ -4,7 +4,7 @@ import React from 'react';
 import { createGame } from './actions';
 
 export default function Home() {
-  const handleSubmit = async (event) => {
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     try {
       const response = await fetch('/api/create-game', {
