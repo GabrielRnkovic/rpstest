@@ -40,7 +40,6 @@ Thumbs.db
 
 # Vercel
 .vercel
-.vercel_build_output
 
 # TypeScript
 *.tsbuildinfo
